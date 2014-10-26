@@ -5,3 +5,4 @@ imap-server.js
 starttls.js
 tests.js
 *.pem
+node_modules
