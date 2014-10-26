@@ -1,0 +1,85 @@
+/* description: Parses end executes mathematical expressions. */
+
+%{
+var rej = "";
+%}
+
+/* lexical grammar */
+%lex
+
+%%
+" "					return 'SPACE';
+\r\n				return 'BREAK';
+\" 					return 'QUOTE';
+[a-zA-Z0-9]+		return 'LINE';
+<<EOF>>				return 'EOF';
+.					return 'CHAR';
+
+/lex
+
+%left BREAK
+%left SPACE
+
+%start start
+
+%% /* language grammar */
+
+start
+	: request {
+		var res = rej;
+		rej = "";
+		return [$1, res];
+	};
+
+
+request
+	: request BREAK request {
+		$$ = $1.concat($3);
+	}
+	| line
+	{
+		$$ = [$1];
+	}
+	| line EOF
+	{
+		rej = $1.join(' ');
+		$$ = [];
+	}
+	| EOF { $$ = []; }
+;
+
+line 
+	: line SPACE LINE
+		{
+		  $1[$1.length] = $3;
+		  $$ = $1;
+		}
+	|  line SPACE QUOTE quoted QUOTE
+		{
+			$1[$1.length] = $4;
+			$$ = $1;
+		}
+	| LINE
+		{
+		  $$ = [$1];
+		}
+	;
+
+quoted
+	: CHAR quoted
+		{
+			$$ = $1 + $2;
+		}
+	| SPACE quoted
+		{
+			$$ = " " + $2;
+		}
+	| LINE quoted
+		{
+			$$ = $1 + $2;
+		}
+	| 
+		{
+			$$ = "";
+		}
+		;
