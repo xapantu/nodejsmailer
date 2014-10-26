@@ -5,6 +5,7 @@
   "main": "main.js",
   "author": "",
   "dependencies": {
-    "sequelize": "~2.0.0-rc2"
+    "sequelize": "~2.0.0-rc2",
+    "sqlite3": "~3.0.2"
   }
 }

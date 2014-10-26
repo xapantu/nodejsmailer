@@ -6,3 +6,5 @@ starttls.js
 tests.js
 *.pem
 node_modules
+index.sqlite3
+db.js

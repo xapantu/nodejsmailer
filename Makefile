@@ -1,4 +1,4 @@
-all: gr main.js starttls.js tests.js tests
+all: gr main.js db.js starttls.js tests.js tests
 
 serve: all server-key.pem server-cert.pem
 	coffee imap-server.cs
@@ -20,8 +20,11 @@ starttls.js: starttls.cs
 
 
 tests.js: tests.cs
-	echo "done"
 	coffee -c tests.cs
+
+db.js: db.cs
+	coffee -c db.cs
+
 
 tests:
 	nodeunit tests.js
