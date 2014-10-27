@@ -20,7 +20,7 @@ starttls.js: starttls.cs
 
 
 tests.js: tests.cs
-	coffee -c tests.cs
+	coffee -m -c tests.cs
 
 db.js: db.cs
 	coffee -c db.cs

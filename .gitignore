@@ -8,3 +8,4 @@ tests.js
 node_modules
 index.sqlite3
 db.js
+*.map

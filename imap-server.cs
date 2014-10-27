@@ -18,6 +18,8 @@ imap_reply =
 			'* CAPABILITY IMAP4rev1 AUTH=EXTERNAL\r\n'
 		else
 			'* CAPABILITY IMAP4rev1 STARTTLS LOGINDISABLED\r\n'
+	flags: (cmd) ->
+		'* FLAGS (\\Answered \\Flagged \\Deleted \\Seen \\Draft)\r\n'
 	ok: () ->
 		'* OK\r\n'
 	
@@ -35,7 +37,6 @@ server = net.createServer (c) -> #'connection' listener
 	wait_for_more = null
 	must_quit = false
 	ssl = false
-	logged = false
 	username = false
 
 	# cmd: an array of an imap command, e.g. ['aa0', 'login', 'username', 'password']
@@ -61,6 +62,7 @@ server = net.createServer (c) -> #'connection' listener
 						db.user.find where: username: cmd[2]
 							.complete (err, user) ->
 								if user and user.password == cmd[3]
+									username = user.username
 									send imap_reply.end cmd
 								else
 									send imap_reply.bad cmd
@@ -71,7 +73,11 @@ server = net.createServer (c) -> #'connection' listener
 				when 'create'
 					send imap_reply.end cmd
 				when 'select'
-					send imap_reply.end cmd
+					if username
+						send imap_reply.flags cmd
+						send imap_reply.end cmd
+					else
+						send imap_reply.bad cmd
 				when 'noop'
 					send imap_reply.end cmd
 				when 'subscribe'
