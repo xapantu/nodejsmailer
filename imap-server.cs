@@ -60,7 +60,7 @@ server = net.createServer (c) -> #'connection' listener
 					else
 						db.user.find where: username: cmd[2]
 							.complete (err, user) ->
-								if user.password == cmd[3]
+								if user and user.password == cmd[3]
 									send imap_reply.end cmd
 								else
 									send imap_reply.bad cmd
