@@ -3,7 +3,7 @@ imap = require './imap.js'
 starttls = require './starttls.js'
 db = require './db.js'
 
-db.load_db()
+database = new db.DataBase 'index.sqlite3'
 
 # cmd: an array of an imap command, e.g. ['aa0', 'login', 'username', 'password']
 # where aa0 is the id of the request, and must be sent when the response is complete
@@ -59,7 +59,7 @@ server = net.createServer (c) -> #'connection' listener
 					if cmd.length != 4
 						send imap_reply.bad cmd
 					else
-						db.user.find where: username: cmd[2]
+						database.user.find where: username: cmd[2]
 							.complete (err, user) ->
 								if user and user.password == cmd[3]
 									username = user.username
