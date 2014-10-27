@@ -6,6 +6,7 @@
   "author": "",
   "dependencies": {
     "sequelize": "~2.0.0-rc2",
-    "sqlite3": "~3.0.2"
+    "sqlite3": "~3.0.2",
+    "jison": "~0.4.15"
   }
 }
